@@ -1,4 +1,4 @@
-package com.example.episodicshows.users;
+package com.example.episodicshows.users.controller;
 
 import com.example.episodicshows.users.data.entity.UserEntity;
 import com.example.episodicshows.users.data.repo.UserRepo;
