@@ -41,3 +41,5 @@ dependencies {
 }
 
 build.dependsOn 'test'
+
+defaultTasks 'clean', 'test', 'build'
