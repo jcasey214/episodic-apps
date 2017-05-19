@@ -1,32 +1,29 @@
 package com.example.episodicshows.users.controller;
 
 import com.example.episodicshows.users.data.entity.UserEntity;
-import com.example.episodicshows.users.data.repo.UserRepo;
+import com.example.episodicshows.users.data.repo.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
-
 @RestController
 public class UsersController {
 
-    private final UserRepo userRepo;
+    private final UsersRepo usersRepo;
 
     @Autowired
-    public UsersController(UserRepo userRepo) {
-        this.userRepo = userRepo;
+    public UsersController(UsersRepo usersRepo) {
+        this.usersRepo = usersRepo;
     }
 
     @GetMapping("/users")
     public Iterable<UserEntity> fetchAllUsers() {
-        return userRepo.findAll();
+        return usersRepo.findAll();
     }
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     public UserEntity createUser(@RequestBody UserEntity user) {
-        return userRepo.save(user);
+        return usersRepo.save(user);
     }
 }

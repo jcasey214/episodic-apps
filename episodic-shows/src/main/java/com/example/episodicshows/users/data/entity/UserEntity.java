@@ -11,6 +11,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 @Entity
 @Table(name = "users")
+@Getter
 @NoArgsConstructor(force = true)
 public class UserEntity {
     @Id

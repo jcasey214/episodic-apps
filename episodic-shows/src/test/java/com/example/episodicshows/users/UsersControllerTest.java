@@ -1,7 +1,7 @@
 package com.example.episodicshows.users;
 
 import com.example.episodicshows.users.data.entity.UserEntity;
-import com.example.episodicshows.users.data.repo.UserRepo;
+import com.example.episodicshows.users.data.repo.UsersRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,7 +43,7 @@ public class UsersControllerTest {
     MockMvc mockMvc;
 
     @Autowired
-    UserRepo userRepo;
+    UsersRepo usersRepo;
 
     @Test
     @Transactional
@@ -51,7 +51,7 @@ public class UsersControllerTest {
     public void testGetUsersEndpoint() throws Exception {
         UserEntity user1 = new UserEntity("luke@example.com");
 
-        userRepo.save(user1);
+        usersRepo.save(user1);
 
         mockMvc.perform(get("/users").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
