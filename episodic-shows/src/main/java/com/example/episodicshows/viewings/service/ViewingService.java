@@ -52,7 +52,9 @@ public class ViewingService {
         ViewingEntity existingViewing = viewingsRepo.findByShowIdAndUserId(episode.getShowId(), userId);
         ViewingEntity updatedViewing;
         if (existingViewing != null) {
-            updatedViewing = existingViewing.withTimecode(viewingRequest.getTimecode()).withUpdatedAt(Date.from(Instant.now()));
+            updatedViewing = existingViewing
+                    .withTimecode(viewingRequest.getTimecode())
+                    .withUpdatedAt(viewingRequest.getUpdatedAt());
         } else {
             updatedViewing = mapNewViewing(userId, viewingRequest, episode);
         }
@@ -65,7 +67,7 @@ public class ViewingService {
                 .showId(episode.getShowId())
                 .timecode(viewingRequest.getTimecode())
                 .userId(userId)
-                .updatedAt(Date.from(Instant.now()))
+                .updatedAt(viewingRequest.getUpdatedAt())
                 .build();
     }
 }
