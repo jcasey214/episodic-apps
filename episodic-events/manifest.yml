@@ -1,0 +1,11 @@
+applications:
+- name: episodic-events
+  instances: 1
+  memory: 512M
+  disk_quota: 1024M
+  routes:
+  - route: episodic-events-vizarded-moorcock.cfapps.io
+  services:
+  - episodic-events-db
+  stack: cflinuxfs2
+  path: "./build/libs/episodic-events-0.0.1-SNAPSHOT.jar"
