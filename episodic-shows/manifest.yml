@@ -7,5 +7,6 @@ applications:
   - route: episodic-shows-empyreal-demeanor.cfapps.io
   services:
   - episodic-shows-db
+  - episodic-queue
   stack: cflinuxfs2
   path: "./build/libs/episodic-shows-0.0.1-SNAPSHOT.jar"
