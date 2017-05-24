@@ -1,5 +1,6 @@
 package com.example.episodicshows.viewings;
 
+import com.example.episodicshows.MessageQueueTestBase;
 import com.example.episodicshows.shows.data.entity.EpisodeEntity;
 import com.example.episodicshows.shows.data.entity.ShowEntity;
 import com.example.episodicshows.shows.data.repo.EpisodesRepo;
@@ -48,7 +49,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.jpa.properties.hibernate.use_sql_comments=true",
         "spring.jpa.properties.hibernate.format_sql=true"
 })
-public class ViewingsControllerTest {
+public class ViewingsControllerTest extends MessageQueueTestBase {
     @Autowired
     MockMvc mockMvc;
 

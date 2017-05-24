@@ -1,8 +1,11 @@
 package com.example.episodicshows.viewings.service;
 
+import com.example.episodicshows.listener.QueueMessage;
 import com.example.episodicshows.shows.data.entity.EpisodeEntity;
 import com.example.episodicshows.shows.data.entity.ShowEntity;
 import com.example.episodicshows.shows.service.ShowService;
+import com.example.episodicshows.users.data.entity.UserEntity;
+import com.example.episodicshows.users.data.repo.UsersRepo;
 import com.example.episodicshows.viewings.data.entity.ViewingEntity;
 import com.example.episodicshows.viewings.data.repo.ViewingsRepo;
 import com.example.episodicshows.viewings.model.RecentlyWatched;
@@ -10,8 +13,6 @@ import com.example.episodicshows.viewings.model.ViewingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -21,11 +22,13 @@ import java.util.stream.Collectors;
 public class ViewingService {
     private final ViewingsRepo viewingsRepo;
     private final ShowService showService;
+    private final UsersRepo usersRepo;
 
     @Autowired
-    public ViewingService(ViewingsRepo viewingsRepo, ShowService showService) {
+    public ViewingService(ViewingsRepo viewingsRepo, ShowService showService, UsersRepo usersRepo) {
         this.viewingsRepo = viewingsRepo;
         this.showService = showService;
+        this.usersRepo = usersRepo;
     }
 
     public List<RecentlyWatched> getRecentlyWatchedByUser(Long userId) {
@@ -61,6 +64,27 @@ public class ViewingService {
         viewingsRepo.save(updatedViewing);
     }
 
+    public void createViewing(QueueMessage message) {
+        EpisodeEntity episode = showService.findEpisodeById(message.getEpisodeId());
+        if (episode == null) {
+            return;
+        }
+        UserEntity user = usersRepo.findOne(message.getUserId());
+        if(user == null) {
+            return;
+        }
+        ViewingEntity existingViewing = viewingsRepo.findByShowIdAndUserId(episode.getShowId(), message.getUserId());
+        ViewingEntity updatedViewing;
+        if (existingViewing != null) {
+            updatedViewing = existingViewing
+                    .withTimecode(message.getOffset())
+                    .withUpdatedAt(message.getCreatedAt());
+        } else {
+            updatedViewing = mapNewViewing(message.getUserId(), message, episode);
+        }
+        viewingsRepo.save(updatedViewing);
+    }
+
     private ViewingEntity mapNewViewing(Long userId, ViewingRequest viewingRequest, EpisodeEntity episode) {
         return ViewingEntity.builder()
                 .episodeId(viewingRequest.getEpisodeId())
@@ -68,6 +92,16 @@ public class ViewingService {
                 .timecode(viewingRequest.getTimecode())
                 .userId(userId)
                 .updatedAt(viewingRequest.getUpdatedAt())
+                .build();
+    }
+
+    private ViewingEntity mapNewViewing(Long userId, QueueMessage message, EpisodeEntity episode) {
+        return ViewingEntity.builder()
+                .episodeId(message.getEpisodeId())
+                .showId(episode.getShowId())
+                .timecode(message.getOffset())
+                .userId(userId)
+                .updatedAt(message.getCreatedAt())
                 .build();
     }
 }

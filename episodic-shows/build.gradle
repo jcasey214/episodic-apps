@@ -34,6 +34,8 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.flywaydb:flyway-core:4.2.0')
+	compile('org.springframework.boot:spring-boot-starter-amqp')
+	compile('org.springframework.amqp:spring-rabbit-junit:1.7.2.RELEASE')
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('mysql:mysql-connector-java')
 	compileOnly('org.projectlombok:lombok')

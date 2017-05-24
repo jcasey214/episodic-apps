@@ -1,5 +1,6 @@
 package com.example.episodicshows.users;
 
+import com.example.episodicshows.MessageQueueTestBase;
 import com.example.episodicshows.users.data.entity.UserEntity;
 import com.example.episodicshows.users.data.repo.UsersRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.jpa.properties.hibernate.use_sql_comments=true",
         "spring.jpa.properties.hibernate.format_sql=true"
 })
-public class UsersControllerTest {
+public class UsersControllerTest extends MessageQueueTestBase {
 
     @Autowired
     MockMvc mockMvc;
