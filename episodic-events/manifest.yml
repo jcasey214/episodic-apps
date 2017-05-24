@@ -7,5 +7,6 @@ applications:
   - route: episodic-events-vizarded-moorcock.cfapps.io
   services:
   - episodic-events-db
+  - episodic-queue
   stack: cflinuxfs2
   path: "./build/libs/episodic-events-0.0.1-SNAPSHOT.jar"

@@ -1,20 +1,21 @@
 package com.example.episodicevents.controller;
 
 import com.example.episodicevents.data.repo.EventsRepo;
-import com.example.episodicevents.model.Event;
-import com.example.episodicevents.model.FastForwardRewindEvent;
-import com.example.episodicevents.model.PlayPauseProgressEvent;
-import com.example.episodicevents.model.ScrubEvent;
+import com.example.episodicevents.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -27,6 +28,12 @@ import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,6 +52,19 @@ public class EventsControllerTest {
     MockMvc mockMvc;
     @Autowired
     EventsRepo eventsRepo;
+    @MockBean
+    RabbitTemplate rabbitTemplate;
+
+    ArgumentCaptor<QueueMessage> argumentCaptor;
+
+    @Before
+    public void setup() {
+        argumentCaptor = ArgumentCaptor.forClass(QueueMessage.class);
+
+        doNothing()
+                .when(rabbitTemplate)
+                .convertAndSend(eq("my-exchange"), eq("my-routing-key"), argumentCaptor.capture());
+    }
 
     @After
     public void cleanUp() {
@@ -212,7 +232,7 @@ public class EventsControllerTest {
         requestBody.addProperty("userId", 52);
         requestBody.addProperty("showId", 987);
         requestBody.addProperty("episodeId", 456);
-        requestBody.addProperty("createdAt", "2017-11-08T15:59:13.0091745");
+        requestBody.addProperty("createdAt", "2017-11-08T15:59:13.0091745Z");
 
         JsonObject data = new JsonObject();
         data.addProperty("offset", 378);
@@ -238,6 +258,10 @@ public class EventsControllerTest {
         assertThat(playPauseProgressEvent.getEpisodeId(), equalTo(456L));
         assertThat(playPauseProgressEvent.getUserId(), equalTo(52L));
         assertThat(playPauseProgressEvent.getData().getOffset(), equalTo(378));
+
+        assertThat(argumentCaptor.getValue().getEpisodeId(), equalTo(456L));
+        assertThat(argumentCaptor.getValue().getOffset(), equalTo(378));
+        assertThat(argumentCaptor.getValue().getUserId(), equalTo(52L));
     }
 
     @Test

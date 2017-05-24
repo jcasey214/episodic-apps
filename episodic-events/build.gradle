@@ -33,6 +33,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('com.google.code.gson:gson:2.8.0')
     compile("org.springframework.boot:spring-boot-starter-amqp")
+	compile('org.springframework.amqp:spring-rabbit-junit:1.7.2.RELEASE')
 	compileOnly('org.projectlombok:lombok')
 	runtime('org.springframework.boot:spring-boot-devtools')
 	compileOnly('org.projectlombok:lombok')
