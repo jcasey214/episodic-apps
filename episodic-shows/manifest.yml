@@ -1,7 +1,7 @@
 applications:
 - name: episodic-shows
   instances: 1
-  memory: 512M
+  memory: 1G
   disk_quota: 1024M
   routes:
   - route: episodic-shows-empyreal-demeanor.cfapps.io
@@ -9,5 +9,6 @@ applications:
   - episodic-shows-db
   - episodic-queue
   - service-registry
+  - config-server
   stack: cflinuxfs2
   path: "./build/libs/episodic-shows-0.0.1-SNAPSHOT.jar"
