@@ -43,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.jpa.properties.hibernate.use_sql_comments=true",
         "spring.jpa.properties.hibernate.format_sql=true"
 })
-public class ShowsControllerTest extends MessageQueueTestBase{
+public class ShowsControllerTest {
 
     @Autowired
     MockMvc mockMvc;
