@@ -2,13 +2,15 @@ package com.example.episodicshows;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan()
-public class DemoApplication {
+@ComponentScan
+@EnableDiscoveryClient
+public class ShowsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(ShowsApplication.class, args);
 	}
 }
