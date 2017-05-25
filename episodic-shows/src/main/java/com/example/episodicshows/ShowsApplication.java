@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDiscoveryClient
 public class ShowsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ShowsApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ShowsApplication.class, args);
+    }
 }

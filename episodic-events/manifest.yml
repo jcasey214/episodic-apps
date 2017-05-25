@@ -9,5 +9,6 @@ applications:
   - episodic-events-db
   - episodic-queue
   - service-registry
+  - config-server
   stack: cflinuxfs2
   path: "./build/libs/episodic-events-0.0.1-SNAPSHOT.jar"
